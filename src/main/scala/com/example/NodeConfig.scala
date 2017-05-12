@@ -33,6 +33,9 @@ case class NodeConfig(isSeed: Boolean = false, seedNodes: Seq[String] = Seq.empt
 
     // use configured ip or get host ip if available
     val ip = if (config hasPath "clustering.ip") config getString "clustering.ip" else HostIP.load getOrElse "127.0.0.1"
+
+    println(s"IP=[$ip]")
+
     val ipValue = ConfigValueFactory fromAnyRef ip
 
     // add seed nodes to config
@@ -41,11 +44,15 @@ case class NodeConfig(isSeed: Boolean = false, seedNodes: Seq[String] = Seq.empt
     }.mkString("\n")
 
     // build the final config and resolve it
-    (ConfigFactory parseString seedNodesString)
+    val finalConfig = (ConfigFactory parseString seedNodesString)
       .withValue("clustering.ip", ipValue)
       .withFallback(ConfigFactory parseResources configPath)
       .withFallback(config)
       .resolve
+
+    println(s"Final config=[${finalConfig.toString}]")
+
+    finalConfig
   }
 
 }
