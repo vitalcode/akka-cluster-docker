@@ -1,5 +1,5 @@
 name := "akka-cluster-docker"
-version := "2.3.10"
+version := "2.5.1"
 scalaVersion := "2.11.8"
 
 enablePlugins(JavaAppPackaging)
