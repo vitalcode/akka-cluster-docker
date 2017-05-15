@@ -35,7 +35,7 @@ case class NodeConfig(isSeed: Boolean = false, seedNodes: Seq[String] = Seq.empt
     val configPath = if (isSeed) SEED_NODE else CLUSTER_NODE
 
     // use configured ip or get host ip if available
-    val ip = if (config hasPath "clustering.ip") config getString "clustering.ip" else HostIP.load getOrElse "127.0.0.1"
+    val ip = InetAddress.getLocalHost.getHostName //if (config hasPath "clustering.ip") config getString "clustering.ip" else HostIP.load getOrElse "127.0.0.1"
     val bindIP = InetAddress.getLocalHost.getHostName
 
     println(s"ip=[$ip]")
