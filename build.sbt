@@ -21,7 +21,9 @@ fork in runSeed := true
 
 javaOptions in runSeed ++= Seq(
     "-Dclustering.ip=127.0.0.1",
-    "-Dclustering.port=2551"
+    "-Dclustering.port=2551",
+    "-Dbind.clustering.ip=127.0.0.1",
+    "-Dbind.clustering.port=2551"
 )
 
 lazy val runNode = taskKey[Unit]("Start a node on 127.0.0.1:2552")
@@ -30,6 +32,8 @@ fork in runNode := true
 
 javaOptions in runNode ++= Seq(
     "-Dclustering.ip=127.0.0.1",
-    "-Dclustering.port=2552"
+    "-Dclustering.port=2552",
+    "-Dbind.clustering.ip=127.0.0.1",
+    "-Dbind.clustering.port=2552"
 )
 
