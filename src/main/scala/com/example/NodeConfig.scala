@@ -1,6 +1,9 @@
 package com.example
 
+import java.net.InetAddress
+
 import com.typesafe.config._
+
 import scala.collection.JavaConversions._
 
 /**
@@ -33,10 +36,13 @@ case class NodeConfig(isSeed: Boolean = false, seedNodes: Seq[String] = Seq.empt
 
     // use configured ip or get host ip if available
     val ip = if (config hasPath "clustering.ip") config getString "clustering.ip" else HostIP.load getOrElse "127.0.0.1"
+    val bindIP = InetAddress.getLocalHost.getHostName
 
-    println(s"IP=[$ip]")
+    println(s"ip=[$ip]")
+    println(s"bindIP=[$bindIP]")
 
     val ipValue = ConfigValueFactory fromAnyRef ip
+    val bindIPValue = ConfigValueFactory fromAnyRef bindIP
 
     // add seed nodes to config
     val seedNodesString = seedNodes.map { node =>
@@ -46,6 +52,7 @@ case class NodeConfig(isSeed: Boolean = false, seedNodes: Seq[String] = Seq.empt
     // build the final config and resolve it
     val finalConfig = (ConfigFactory parseString seedNodesString)
       .withValue("clustering.ip", ipValue)
+      .withValue("bind.clustering.ip", bindIPValue)
       .withFallback(ConfigFactory parseResources configPath)
       .withFallback(config)
       .resolve
